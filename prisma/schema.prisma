@@ -1,24 +1,18 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-generator client {
-    provider = "prisma-client-js"
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
-datasource db {
-    provider = "sqlite"
-    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-    // Further reading:
-    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = env("DATABASE_URL")
+generator client {
+  provider = "prisma-client-js"
 }
 
 model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id          Int      @id @default(autoincrement())
+    name        String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 
     createdBy   User   @relation(fields: [createdById], references: [id])
     createdById String
@@ -26,19 +20,18 @@ model Post {
     @@index([name])
 }
 
-// Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
     userId            String
     type              String
     provider          String
     providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
     expires_at        Int?
     token_type        String?
     scope             String?
-    id_token          String? // @db.Text
+    id_token          String? @db.Text
     session_state     String?
     user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -53,21 +46,108 @@ model Session {
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+enum UserType {
+    SEEKER
+    COMPANY
+}
+
 model User {
     id            String    @id @default(cuid())
     name          String?
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    userType      UserType?
     accounts      Account[]
     sessions      Session[]
+    seeker        Seeker[]
+    company       Company[]
+    comments      Comment[]
     posts         Post[]
+
+}
+
+model Seeker {
+    id              String       @id @default(cuid())
+    firstName       String       @db.VarChar(255)
+    surName         String       @db.VarChar(255)
+    sex             String       @db.VarChar(255)
+    dob             String
+    phone           String       @db.VarChar(20)
+    educationLevel  String       @db.VarChar(255)
+    schoolName      String       @db.VarChar(255)
+    major           String       @db.VarChar(255)
+    gpa             String
+    profile         String
+    userId          String
+    user            User         @relation(fields: [userId], references: [id])
+    applications    Application[]
+    @@unique([userId])
+}
+
+model Company {
+    id              String       @id @default(cuid())
+    companyName     String       @db.VarChar(255)
+    companyType     String       @db.VarChar(50)
+    companyDetail   String       @db.VarChar(1000)
+    companyAddress  String       @db.VarChar(255)
+    companyPhone    String       @db.VarChar(20)
+    logo            String
+    userId          String
+    user            User         @relation(fields: [userId], references: [id])
+    jobPostings     JobPosting[]
+    @@unique([userId])
+}
+
+model JobPosting {
+  id              String       @id @default(cuid())
+  title           String       @db.VarChar(255)
+  description     String       @db.VarChar(1000)
+  requirements    String       @db.VarChar(1000)
+  benefits        String       @db.VarChar(1000)
+  salary          String        
+  startTime       String       @db.VarChar(20) 
+  endTime         String       @db.VarChar(20) 
+  applicationJob  String          
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  companyId       String
+  company         Company      @relation(fields: [companyId], references: [id])
+  applications    Application[] 
+  comments        Comment[]
+  @@index([companyId])
+}
+
+model Application {
+    id             String      @id @default(cuid())
+    coverLetter    String       @db.VarChar(1000)
+    status         String      @default("pending")
+    createdAt      DateTime    @default(now())
+    updatedAt      DateTime    @updatedAt
+    seekerId       String
+    seeker         Seeker      @relation(fields: [seekerId], references: [id])
+    jobPostingId   String
+    jobPosting     JobPosting  @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
+    @@index([seekerId])
+    @@index([jobPostingId])
+}
+
+model Comment {
+    id            String      @id @default(cuid())
+    content       String       @db.VarChar(1000)
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    userId        String
+    user          User        @relation(fields: [userId], references: [id])
+    jobPostingId  String
+    jobPosting    JobPosting  @relation(fields: [jobPostingId], references: [id])
+    @@index([userId])
+    @@index([jobPostingId])
 }
 
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
-
     @@unique([identifier, token])
 }
