@@ -92,7 +92,7 @@ export function NavBar({ setPage }: PageProps) {
                     className="relative justify-center items-center flex rounded-full bg-orange-500 p-5 h-[3.6rem] w-[3.6rem] font-semibold text-white no-underline transition-all hover:bg-white/20"
                     onClick={() => void signIn()}
                   >
-                    <FontAwesomeIcon icon={faAnglesRight} beat />
+                    <FontAwesomeIcon icon={faAnglesRight} className="h-[3.6rem] w-[3.6rem]" beat />
                   </button>
                 </div>
             </div>
