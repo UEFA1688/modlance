@@ -61,7 +61,7 @@ export function MyJobs({ setPage }: PageProps) {
               ย้อนกลับ
           </button>
 
-          <div className="break-all justify-start items-center">
+          <div className="break-all justify-start items-center my-5">
             <h1 className="indent-8 text-start text-4xl font-bold text-white">
               {getMyjobsCompany?.jobPostings
                 ?.filter((jobPosting) => jobPosting.id === jobPostingsId)

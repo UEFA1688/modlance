@@ -162,7 +162,7 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
           setIsSuccess(true);
           setTimeout(() => {
             router.refresh();
-          }, 1000);
+          }, 500);
         }
       }
     } else {

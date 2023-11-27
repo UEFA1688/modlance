@@ -20,7 +20,7 @@ export function NavBar({ setPage }: PageProps) {
     return (
     <>
     <nav className="sticky inset-x-0 w-fit bottom-5 z-40 mx-auto text-center">
-    {sessionData &&
+    {sessionData && checkUserType?.type === "COMPANY"  &&
       <div className="absolute right-5 w-fit -top-16 z-50 transition-all rounded-full">
         <CreateButton  setPage={setPage}/>
       </div>}

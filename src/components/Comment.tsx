@@ -1,6 +1,8 @@
 "use client"
 import {  useState } from 'react';
 import { useRouter } from 'next/navigation'
+import { useSession } from "next-auth/react";
+
 import { api } from "~/utils/api";
 import { IconLoading } from "~/components/IconLoading";
 
@@ -10,15 +12,16 @@ interface CommentProps {
   
 export function Comment({ jobId }: CommentProps) {
     const router = useRouter()
-
+ 
+    const { data: sessionData } = useSession();
+ 
     const { data: getAllComments, status: getAllCommentsStatus } = api.comment.getAllComments.useQuery({ jobId: jobId });
     const deleteComment = api.comment.deleteComment.useMutation();
     const commentPosting = api.comment.commentPosting.useMutation();
 
     const [content, setContent] = useState('');
     const [contentError, setContentError] = useState('');
-    
-    const [comments, setComments] = useState([]);
+
     
 
 
@@ -54,49 +57,33 @@ export function Comment({ jobId }: CommentProps) {
             </h1>
         </div>
 
-        {getAllCommentsStatus === "loading" ? <IconLoading />:
+        {getAllCommentsStatus === "loading" ? 
+         <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+            <div className="animate-pulse transition-all p-10 m-10">
+               <p className="text-lg sm:text-xl font-normal text-center text-gray-400">กำลังโหลด...</p>
+            </div>
+        </div>
+        
+        :
         <div className="relative m-5 rounded-3xl">
             <div className="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+
+            {!getAllComments && 
+                <div className="animate-pulse transition-all p-10 m-10">
+                <p className="text-lg sm:text-xl font-normal text-center text-gray-400">ไม่มีข้อความ...</p>
+                </div>
+            }
                 <ul className="space-y-5">
-            {getAllComments?.map((comment) => (
-                
-                <div key={comment.id}>
-                {!comment.userIdMatched ?
-                    <li className="flex gap-x-2 sm:gap-x-4">
-                    <a
-                    className="bg-no-repeat bg-cover bg-center w-[2.375rem] h-[2.375rem] rounded-full"
-                    style={{ backgroundImage: `url(${comment.userData?.image ?? ""})` }}> 
-                    </a>
-                        <div className="break-all rounded-lg p-4 space-y-3 bg-slate-900 border-gray-700">
-                            <h3 className="font-semibold text-xs text-orange-500">
-                             {comment.userData?.userType === "COMPANY" ? comment.userData?.company[0]?.companyName : comment.userData?.seeker[0]?.firstName}
-                            </h3>
-                            <div className="space-y-1.5">
-                                <p className="text-sm text-white">
-                                {comment.content}                                
-                                </p>
-                            </div>
-                            <h4 className="font-normal text-[0.6rem] text-gray-400">
-                                {`เวลา: ${new Date(comment.createdAt).toLocaleTimeString('th-TH', { hour12: false })} | วันที่: ${new Date(comment.createdAt).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}`}
-                            </h4>
-                        </div>
-                    </li>
-                    :
-                    <li className="max-w-2xl ms-auto flex justify-end gap-x-2 sm:gap-x-4">
-                        <div className="flex flex-col items-end">
-                            <button
-                                className="px-1 text-xs text-end rounded-sm text-white hover:text-gray-200 bg-red-500 hover:bg-red-800"
-                                onClick={() => {
-                                    deleteComment.mutate({
-                                      commentId: comment.id,
-                                    });
-                                    router.refresh();
-                                  }}
-                            >
-                                X
-                            </button>  
-                            <div className="break-all rounded-lg p-4 space-y-3 bg-orange-900/50">
-    
+                {getAllComments?.map((comment) => (
+                    
+                    <div key={comment.id}>
+                    {!comment.userIdMatched ?
+                        <li className="flex gap-x-2 sm:gap-x-4">
+                        <a
+                        className="bg-no-repeat bg-cover bg-center w-[2.375rem] h-[2.375rem] rounded-full"
+                        style={{ backgroundImage: `url(${comment.userData?.image ?? ""})` }}> 
+                        </a>
+                            <div className="break-all rounded-lg p-4 space-y-3 bg-slate-900 border-gray-700">
                                 <h3 className="font-semibold text-xs text-orange-500">
                                 {comment.userData?.userType === "COMPANY" ? comment.userData?.company[0]?.companyName : comment.userData?.seeker[0]?.firstName}
                                 </h3>
@@ -105,23 +92,52 @@ export function Comment({ jobId }: CommentProps) {
                                     {comment.content}                                
                                     </p>
                                 </div>
-                                <h4 className="font-normal text-[0.6rem] text-orange-200">
+                                <h4 className="font-normal text-[0.6rem] text-gray-400">
                                     {`เวลา: ${new Date(comment.createdAt).toLocaleTimeString('th-TH', { hour12: false })} | วันที่: ${new Date(comment.createdAt).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}`}
                                 </h4>
-                                
                             </div>
+                        </li>
+                        :
+                        <li className="max-w-2xl ms-auto flex justify-end gap-x-2 sm:gap-x-4">
+                            <div className="flex flex-col items-end">
+                                <button
+                                    className="px-1 text-xs text-end rounded-sm text-white hover:text-gray-200 bg-red-500 hover:bg-red-800"
+                                    onClick={() => {
+                                        deleteComment.mutate({
+                                        commentId: comment.id,
+                                        });
+                                        router.refresh();
+                                    }}
+                                >
+                                    X
+                                </button>  
+                                <div className="break-all rounded-lg p-4 space-y-3 bg-orange-900/50">
+        
+                                    <h3 className="font-semibold text-xs text-orange-500">
+                                    {comment.userData?.userType === "COMPANY" ? comment.userData?.company[0]?.companyName : comment.userData?.seeker[0]?.firstName}
+                                    </h3>
+                                    <div className="space-y-1.5">
+                                        <p className="text-sm text-white">
+                                        {comment.content}                                
+                                        </p>
+                                    </div>
+                                    <h4 className="font-normal text-[0.6rem] text-orange-200">
+                                        {`เวลา: ${new Date(comment.createdAt).toLocaleTimeString('th-TH', { hour12: false })} | วันที่: ${new Date(comment.createdAt).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+                                    </h4>
+                                    
+                                </div>
+                            </div>
+                            <a
+                            className="bg-no-repeat bg-cover bg-center w-[2.375rem] h-[2.375rem] rounded-full"
+                            style={{ backgroundImage: `url(${comment.userData?.image ?? ""})` }}> 
+                            </a>
+                        </li>
+                        }
                         </div>
-                        <a
-                        className="bg-no-repeat bg-cover bg-center w-[2.375rem] h-[2.375rem] rounded-full"
-                        style={{ backgroundImage: `url(${comment.userData?.image ?? ""})` }}> 
-                        </a>
-                    </li>
-                    }
-                    </div>
-                    ))}
+                ))}
                 </ul>
             </div>
-
+            {sessionData &&
             <footer className="max-w-4xl mx-auto sticky bottom-0 z-10 bg-white/[.05] p-5 rounded-full backdrop-blur-md">
                 <form className="relative flex flex-row" onSubmit={handleCommeting}>
                 <textarea
@@ -144,6 +160,7 @@ export function Comment({ jobId }: CommentProps) {
                     <p className="text-orange-500 text-center text-sm mt-2">{contentError}</p>
                 )}
             </footer>
+            }
         </div>
     } 
     </>   

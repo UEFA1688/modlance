@@ -81,7 +81,7 @@ export function HeroSec(){
                 <div className="p-4 md:p-5">
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col gap-2">
-                      <h3 className="max-w-[8rem] md:max-w-[12rem] lg:max-w-[16rem] text-start truncate font-semibold text-gray-200">
+                      <h3 className="md:max-w-[12rem] lg:max-w-[16rem] text-start break-all md:truncate font-semibold text-gray-200">
                         {getJobPosting.title}
                       </h3>
                       <div className="flex flex-col gap-1 indent-2">
@@ -109,7 +109,7 @@ export function HeroSec(){
           </div>
           {filteredJobPostings && filteredJobPostings.length === 0 && 
             <div className="animate-pulse transition-all p-10 m-10">
-              <p className="text-lg sm:text-xl font-normal text-center text-gray-400">ไม่มีงานที่ประกาศรับมัคร<br/>{searchQuery && <span className="ml-2">{searchQuery}</span>}</p>
+              <p className="text-lg sm:text-xl font-normal text-center text-gray-400">ไม่มีงานที่ประกาศรับสมัคร<br/>{searchQuery && <span className="ml-2">{searchQuery}</span>}</p>
             </div>
           }
       </div>

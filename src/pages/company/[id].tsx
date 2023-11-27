@@ -84,7 +84,7 @@ export default function Company() {
     </div>
     
     <div className="flex flex-col gap-5 items-center mb-10 p-2 md:p-10">
-      <h2 className="text-lg sm:text-3xl font-semibold text-white">งานที่ประกาศรับมัคร</h2>
+      <h2 className="text-lg sm:text-3xl font-semibold text-white">งานที่ประกาศรับสมัคร</h2>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
 
       {getCompanyById?.jobPostings.map((getJobPosting) => (
@@ -114,7 +114,7 @@ export default function Company() {
       ))}
 
       </div>
-      {getCompanyById?.jobPostings.length === 0 && <p className="text-xs sm:text-sm font-normal text-gray-400">ไม่มีงานที่ประกาศรับมัครของบริษัทนี้</p>}
+      {getCompanyById?.jobPostings.length === 0 && <p className="text-xs sm:text-sm font-normal text-gray-400">ไม่มีงานที่ประกาศรับสมัครของบริษัทนี้</p>}
     </div>
     </>
 

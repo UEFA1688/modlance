@@ -220,7 +220,7 @@ export default function Job() {
                 onClick={() => router.push(`/company/${getJobById?.companyId}`)}>
               <FontAwesomeIcon icon={faBuilding} className="w-10 h-10" />
               <p>
-                ข้อมูลริษัท
+                ข้อมูลบริษัท
               </p>
               </button>
             </div>
