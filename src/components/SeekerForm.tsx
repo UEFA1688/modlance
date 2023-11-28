@@ -162,7 +162,7 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
           setIsSuccess(true);
           setTimeout(() => {
             router.push('/');
-          }, 500);
+          }, 2000);
         }
       }
     } else {

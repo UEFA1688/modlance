@@ -146,7 +146,7 @@ export function CompanyForm({ company, setCompany }: CompanyFormProps){
           setIsSuccess(true);
           setTimeout(() => {
             router.push('/');
-          }, 500);
+          }, 2000);
         }
       }
     } else {
