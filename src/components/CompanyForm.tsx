@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { api } from "~/utils/api";
 import { useEdgeStore } from '~/lib/edgestore';
-import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faClipboardCheck, faEllipsis, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -89,7 +89,6 @@ export function CompanyForm({ company, setCompany }: CompanyFormProps){
 
   const { edgestore } = useEdgeStore();
   const registerCompanyMutation = api.user.registerCompany.useMutation();
-  const router = useRouter()
   const [submitError, setSubmitError] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -145,7 +144,7 @@ export function CompanyForm({ company, setCompany }: CompanyFormProps){
           setSubmitError('');
           setIsSuccess(true);
           setTimeout(() => {
-            router.replace("/refresh");
+            redirect('/refresh');
           }, 500);
         }
       }

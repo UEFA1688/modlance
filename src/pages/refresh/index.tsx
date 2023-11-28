@@ -4,5 +4,6 @@ import type {
 
   
   export async function getServerSideProps(context: GetServerSidePropsContext) {
-    return { redirect: { destination: "/" } }
+    return { redirect: { destination: "/" },
+    permanent: false, }
   }
