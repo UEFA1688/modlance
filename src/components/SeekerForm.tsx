@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { api } from "~/utils/api";
 import { useEdgeStore } from '~/lib/edgestore';
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faClipboardCheck, faEllipsis, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -161,7 +161,6 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
           setSubmitError('');
           setIsSuccess(true);
           setTimeout(() => {
-            redirect('/refresh')
             router.replace("/refresh");
           }, 500);
         }
