@@ -2,13 +2,11 @@
 "use client"
 import { useState } from 'react';
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { api } from "~/utils/api";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBriefcase, faMoneyBill } from '@fortawesome/free-solid-svg-icons';
 
 export function HeroSec(){
-  const router = useRouter()
   const {data: getJobPostings, status} = api.user.getJobPostings.useQuery();
   const [searchQuery, setSearchQuery] = useState('');
   

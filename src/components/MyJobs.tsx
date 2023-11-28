@@ -55,16 +55,15 @@ export function MyJobs({ setPage }: PageProps) {
 
             <div className="justify-center grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-10">
             {filteredSeekers && filteredSeekers.length > 0 && (filteredSeekers.map((filteredSeeker) => (
+            <Link href={`/seeker/${filteredSeeker.seeker.id}`} className="w-full p-2 flex flex-col justify-center items-center bg-white/[.05] hover:bg-white/[.15] border border-white/[.05] rounded-xl transition-all">
               <button
                 key={filteredSeeker.seeker.id}
-                className="w-full p-2 flex flex-col justify-center items-center bg-white/[.05] hover:bg-white/[.15] border border-white/[.05] rounded-xl transition-all"
                 onClick={() => {
                   setJobPostingsId('');
                   updateViewedMutation({
                     seekerId: filteredSeeker.seeker.id,
                     jobPostingId: jobPostingsId,
                   });
-                  router.push(`/seeker/${filteredSeeker.seeker.id}`);
                 }}
               >
                 <div className="p-4 md:p-5">
@@ -105,6 +104,7 @@ export function MyJobs({ setPage }: PageProps) {
                   </div>
                 </div>
               </button>
+            </Link>
             )))}
             </div>
             { filteredSeekers?.length === 0 && <NoDataMessage />}
