@@ -3,7 +3,6 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from 'next/link'
 import { api } from "~/utils/api";
-import { useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAnglesRight, faBriefcase, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { CreateButton } from "~/components/CreateButton";
@@ -13,7 +12,6 @@ interface PageProps {
 }
 
 export function NavBar({ setPage }: PageProps) {
-    const router = useRouter()
     const { data: sessionData } = useSession();
     const { data: checkUserType } = api.user.checkUserType.useQuery();
 
