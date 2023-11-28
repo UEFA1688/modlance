@@ -59,11 +59,14 @@ export function MyJobs({ setPage }: PageProps) {
               <button
                 key={filteredSeeker.seeker.id}
                 onClick={() => {
-                  setJobPostingsId('');
-                  updateViewedMutation({
-                    seekerId: filteredSeeker.seeker.id,
-                    jobPostingId: jobPostingsId,
-                  });
+                  if (filteredSeeker.status !== "viewed"){
+                    setJobPostingsId('');
+                    updateViewedMutation({
+                      seekerId: filteredSeeker.seeker.id,
+                      jobPostingId: jobPostingsId,
+                    });
+                  }
+          
                 }}
               >
                 <div className="p-4 md:p-5">
