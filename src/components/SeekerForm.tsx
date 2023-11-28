@@ -97,6 +97,7 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
 
   const { edgestore } = useEdgeStore();
   const registerSeekerMutation = api.user.registerSeeker.useMutation();
+  const router = useRouter()
   const [submitError, setSubmitError] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -160,7 +161,8 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
           setSubmitError('');
           setIsSuccess(true);
           setTimeout(() => {
-            redirect('/');
+            redirect('/refresh')
+            router.replace("/refresh");
           }, 500);
         }
       }
