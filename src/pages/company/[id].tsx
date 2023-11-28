@@ -1,5 +1,6 @@
 "use client"
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 import { api } from "~/utils/api";
 import { IconLoading } from "~/components/IconLoading";
 import Image from 'next/image';
@@ -19,12 +20,12 @@ export default function Company() {
     <>
 
     <div className="flex flex-col justify-center items-center p-5 sm:p-10 gap-5">
-    <button className="inline-flex justify-center items-center gap-x-1.5 text-sm text-gray-400 hover:text-gray-200" 
-        onClick={() => router.push('/')}
-        >
+    <Link href={`/`}>
+      <button className="inline-flex justify-center items-center gap-x-1.5 text-sm text-gray-400 hover:text-gray-200" >
         <svg className="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         กลับหน้าหลัก
       </button>
+    </Link>
 
       <div className="w-full sm:w-auto flex flex-col items-center gap-4 bg-white/[.05] border border-white/[.05] p-5 lg:p-10 rounded-lg shadow hover:bg-white/[.06] transition-all">
         <div className="w-40 h-40 sm:w-48 sm:h-48 lg:w-60 lg:h-60 relative rounded-full overflow-hidden">
@@ -88,29 +89,30 @@ export default function Company() {
       <div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
 
       {getCompanyById?.jobPostings.map((getJobPosting) => (
-        <button
-          key={getJobPosting.id} 
-          className="flex flex-col bg-white/[.05] hover:bg-white/[.15] border border-white/[.05] rounded-xl transition-all" 
-          onClick={() => router.push(`/job/${getJobPosting.id}`)}
-        >
-          <div className="p-4 md:p-5">
-            <div className="flex justify-between items-center">
-              <div className="flex flex-col gap-2">
-                <h3 className="max-w-[8rem] md:max-w-[12rem] lg:max-w-[16rem] text-start truncate font-semibold text-gray-200">
-                  {getJobPosting.title}
-                </h3>
-                <div className="flex flex-col gap-1 indent-2">
-                  <p className="inline-flex gap-1 items-center max-w-[8rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-base text-gray-400">
-                    <FontAwesomeIcon icon={faBriefcase} className="w-4 h-4" />{getJobPosting.applicationJob} ตำแหน่ง
-                  </p>
-                  <p className="inline-flex gap-1 items-center max-w-[8rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-base text-gray-400">
-                    <FontAwesomeIcon icon={faMoneyBill} className="w-4 h-4" />{getJobPosting.salary} บาท
-                  </p>
+        <Link href={`/job/${getJobPosting.id}`}>
+          <button
+            key={getJobPosting.id} 
+            className="flex flex-col bg-white/[.05] hover:bg-white/[.15] border border-white/[.05] rounded-xl transition-all" 
+          >
+            <div className="p-4 md:p-5">
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-2">
+                  <h3 className="max-w-[8rem] md:max-w-[12rem] lg:max-w-[16rem] text-start truncate font-semibold text-gray-200">
+                    {getJobPosting.title}
+                  </h3>
+                  <div className="flex flex-col gap-1 indent-2">
+                    <p className="inline-flex gap-1 items-center max-w-[8rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-base text-gray-400">
+                      <FontAwesomeIcon icon={faBriefcase} className="w-4 h-4" />{getJobPosting.applicationJob} ตำแหน่ง
+                    </p>
+                    <p className="inline-flex gap-1 items-center max-w-[8rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-base text-gray-400">
+                      <FontAwesomeIcon icon={faMoneyBill} className="w-4 h-4" />{getJobPosting.salary} บาท
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </button>
+          </button>
+        </Link>
       ))}
 
       </div>

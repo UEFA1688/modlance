@@ -37,11 +37,10 @@ export default function Register() {
     if (!checkUserType) {
       return <IconLoading/>
     }
-    router.push('/')
+    router.replace('/')
   }
 
-  else{
-
+  else if (checkUserType?.needsRegistration){
     return (
       <div className="min-h-screen flex flex-col items-center justify-center max-w-[85rem] mx-auto px-6 sm:px-8 lg:px-12 py-8 sm:py-12">
         {seeker||company ?

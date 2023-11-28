@@ -51,10 +51,10 @@ export const commentRouter = createTRPCRouter({
       
         return 'Comment deleted successfully';
     }),    
-    getAllComments: protectedProcedure.input(z.object({
+    getAllComments: publicProcedure.input(z.object({
         jobId: z.string(),
     })).query(async ({ ctx, input }) => {
-        const userId = ctx.session.user.id;
+
         const { jobId } = input;
     
         const comments = await ctx.db.comment.findMany({
@@ -62,38 +62,35 @@ export const commentRouter = createTRPCRouter({
                 jobPostingId: jobId,
             },
         });
-    
-        const commentsWithMatch = await Promise.all(comments.map(async (comment) => {
-            const userData = await ctx.db.user.findUnique({
-                where: {
-                    id: comment.userId,
-                },
-                include: {
-                    seeker: {
-                        select: {
-                            firstName: true,
-                            surName: true,
-                        },
-                    },
-                    company: {
-                        select: {
-                            companyName: true,
-                        },
-                    },
-                },
-            });
-            
 
-            const userIdMatched = comment.userId === userId;
-            return {
-                ...comment,
-                userIdMatched,
-                userData,
-            };
+        const commentsUserData = await Promise.all(comments.map(async (comment) => {
+          const userData = await ctx.db.user.findUnique({
+                  where: {
+                      id: comment.userId,
+                  },
+                  include: {
+                      seeker: {
+                          select: {
+                              firstName: true,
+                              surName: true,
+                          },
+                      },
+                      company: {
+                          select: {
+                              companyName: true,
+                          },
+                      },
+                  },
+          });           
+
+          return {
+                  ...comment,
+                  userData,
+          };
         }));
-        
+
+        return commentsUserData;
     
-        return commentsWithMatch;
     }),
 
   });

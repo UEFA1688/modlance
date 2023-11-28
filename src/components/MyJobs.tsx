@@ -1,6 +1,7 @@
 
 "use client"
 import { useState } from 'react';
+import Link from 'next/link'
 import { api } from "~/utils/api";
 import { useRouter } from 'next/navigation'
 import { IconLoading } from "~/components/IconLoading";
@@ -19,7 +20,6 @@ export function MyJobs({ setPage }: PageProps) {
     const { mutate: deleteJobPosting } = api.user.deleteJobPosting.useMutation();
     const [showCompanyApplication, setShowCompanyApplication] = useState(false);
     const [jobPostingsId, setJobPostingsId] = useState('');
-    const [deleteJob, setDeleteJob] = useState(false);
     
     const filteredSeekers = getMyjobsCompany?.jobPostings
     ?.filter((jobPosting) => jobPosting.id === jobPostingsId)
@@ -28,25 +28,9 @@ export function MyJobs({ setPage }: PageProps) {
     );
   
 
-    if (status === "loading") {
+    if (status === "loading" || statusMyjobsCompany === "loading" || statusSeekerApplications === "loading") {
         return <IconLoading/>;
     }
-    else if (statusMyjobsCompany === "loading" || statusSeekerApplications === "loading") {
-        return (
-        <div className="max-w-[85rem]  min-h-screen flex flex-col gap-5 px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-          <div className="mt-20 grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
-            {Array.from({ length: 12 }, (_, index) => (
-              <a
-                key={index} 
-                className="flex flex-col bg-white/[.05] hover:bg-white/[.15] border border-white/[.05] rounded-xl transition-all py-20 animate-pulse"
-              >
-              </a>
-            ))}
-          </div>
-        </div>
-        );
-    }
-    
 
     else if (showCompanyApplication && checkUserType?.type === "COMPANY"){
       return (
@@ -154,22 +138,19 @@ export function MyJobs({ setPage }: PageProps) {
                   }}
                 >
                 <button
-                  disabled={deleteJob && true}
-                  className={`absolute -top-9 right-0 px-2 py-1 rounded-lg text-white hover:bg-red-500/50 ${deleteJob ? "bg-red-500/50" : "bg-red-500"} bg-red-500`}
+                  className={`absolute top-3 right-3 px-2 py-1 rounded-lg text-white hover:bg-red-500/50 bg-red-500`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setDeleteJob(true);
                     deleteJobPosting({
                       jobId: jobPosting.id,
                     });
                     router.refresh();                      
                   }}
                 >
-                  {`${deleteJob ? 'กำลังลบ...': 'ลบงาน'}`}
+                  ลบงาน
                 </button>
                 <button
                     className="bg-white/[.05] hover:bg-white/[.15] border border-white/[.05] rounded-xl transition-all"
-                    disabled={deleteJob && true}
                     onChange={() => {
                       setJobPostingsId(jobPosting.id);
                       setShowCompanyApplication(true);
@@ -205,41 +186,41 @@ export function MyJobs({ setPage }: PageProps) {
                 Array.isArray(getSeekerApplications) &&
                 getSeekerApplications.length > 0 && (
                 getSeekerApplications.map((getSeekerApplication) => (
-                <button
-                  key={getSeekerApplication.applicationId}
+                <Link href={`/job/${getSeekerApplication.jobPosting.id}`} 
                   className="flex flex-col bg-white/[.05] hover:bg-white/[.15] border border-white/[.05] rounded-xl transition-all" 
-                  onClick={() => router.push(`/job/${getSeekerApplication.jobPosting.id}`)}
                 >
-                  <div className="p-4 md:p-5">
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-col gap-5">
-                        <h3 className="max-w-[18rem] md:max-w-[12rem] lg:max-w-[16rem] text-start text-xl truncate font-semibold text-gray-200">
-                          {getSeekerApplication.jobPosting.title}
-                        </h3>
-                        <p className="text-start max-w-[18rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-sm text-gray-400">
-                          {getSeekerApplication.jobPosting.company.companyName}
-                        </p>
-                        <p className="text-start max-w-[18rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-sm text-gray-400">
-                          {`สมัครเมื่อ: ${new Date(getSeekerApplication.createdAt).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}`}
-                        </p>
-                        {getSeekerApplication.status === "pending" ?
-                        <div className="bg-gray-500/50 py-1 px-2 max-w-[10rem] md:max-w-[9rem] lg:max-w-[10rem] rounded-full items-center justify-start text-white">
-                          <p className="text-sm truncate">
-                              ยื่นใบสมัคร
+                  <button key={getSeekerApplication.applicationId}>
+                    <div className="p-4 md:p-5">
+                      <div className="flex justify-between items-center">
+                        <div className="flex flex-col gap-5">
+                          <h3 className="max-w-[18rem] md:max-w-[12rem] lg:max-w-[16rem] text-start text-xl truncate font-semibold text-gray-200">
+                            {getSeekerApplication.jobPosting.title}
+                          </h3>
+                          <p className="text-start max-w-[18rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-sm text-gray-400">
+                            {getSeekerApplication.jobPosting.company.companyName}
                           </p>
-                        </div>
-                        :
-                        <div className="bg-orange-500/50 py-1 px-2 max-w-[10rem] md:max-w-[9rem] lg:max-w-[10rem] rounded-full items-center justify-start text-white">
-                          <p className="text-sm truncate">
-                            บริษัทดูใบสมัครแล้ว
-                        </p>
-                        </div>
-                        }
+                          <p className="text-start max-w-[18rem] md:max-w-[12rem] lg:max-w-[16rem] truncate text-sm text-gray-400">
+                            {`สมัครเมื่อ: ${new Date(getSeekerApplication.createdAt).toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}`}
+                          </p>
+                          {getSeekerApplication.status === "pending" ?
+                          <div className="bg-gray-500/50 py-1 px-2 max-w-[10rem] md:max-w-[9rem] lg:max-w-[10rem] rounded-full items-center justify-start text-white">
+                            <p className="text-sm truncate">
+                                ยื่นใบสมัคร
+                            </p>
+                          </div>
+                          :
+                          <div className="bg-orange-500/50 py-1 px-2 max-w-[10rem] md:max-w-[9rem] lg:max-w-[10rem] rounded-full items-center justify-start text-white">
+                            <p className="text-sm truncate">
+                              บริษัทดูใบสมัครแล้ว
+                          </p>
+                          </div>
+                          }
 
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </button>            
+                  </button>   
+                </Link>         
                 ))
               )}
 

@@ -1,6 +1,7 @@
 
 "use client"
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from 'next/link'
 import { api } from "~/utils/api";
 import { useRouter } from 'next/router'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,10 +61,8 @@ export function NavBar({ setPage }: PageProps) {
                   </button>
                 </>
               }
-
-              <button className="inline-flex items-center space-x-5 p-1 transition-all font-semibold text-xl text-white bg-orange-500 hover:bg-white/20 rounded-full"
-                      onClick={() => router.push(checkUserType?.type === "SEEKER" ? `/seeker/${checkUserType?.userId?.id}` : `/company/${checkUserType?.userId?.id}`)}
-              >
+            <Link href={checkUserType?.type === "SEEKER" ? `/seeker/${checkUserType?.userId?.id}` : `/company/${checkUserType?.userId?.id}`}>
+              <button className="inline-flex items-center space-x-5 p-1 transition-all font-semibold text-xl text-white bg-orange-500 hover:bg-white/20 rounded-full">
                 <a
                   className="bg-no-repeat bg-cover bg-center w-20 h-20 rounded-full"
                   style={{ backgroundImage: `url(${sessionData.user?.image ?? ""})` }}> 
@@ -74,6 +73,7 @@ export function NavBar({ setPage }: PageProps) {
                   {checkUserType?.userId?.name}
                 </p>
               </button>
+            </Link>
             </div>
 
           </>

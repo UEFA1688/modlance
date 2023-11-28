@@ -1,8 +1,9 @@
 "use client"
 import type {
   GetServerSidePropsContext,
-} from "next"
-import { getServerSession } from "next-auth/next"
+} from "next";
+import Link from 'next/link';
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "~/server/auth";
 import { useRouter } from 'next/router';
 import { api } from "~/utils/api";
@@ -28,12 +29,12 @@ export default function Seeker() {
   else if (seekerProtect?.hasApplied) {
     return (
       <div className="flex flex-col justify-center items-center p-5 sm:p-10 gap-5">
-        <button className="inline-flex justify-center items-center gap-x-1.5 text-sm text-gray-400 hover:text-gray-200" 
-          onClick={() => router.push('/')}
-          >
+      <Link href={`/`}>
+        <button className="inline-flex justify-center items-center gap-x-1.5 text-sm text-gray-400 hover:text-gray-200">
           <svg className="flex-shrink-0 w-4 h-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           กลับหน้าหลัก
         </button>
+      </Link>
         <div className="w-full sm:w-auto flex flex-col items-center gap-4 bg-white/[.05] border border-white/[.05] p-5 lg:p-10 rounded-lg shadow hover:bg-white/[.06] transition-all">
           <div className="w-40 h-40 sm:w-48 sm:h-48 lg:w-60 lg:h-60 relative rounded-full overflow-hidden">
             <Image
