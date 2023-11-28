@@ -144,7 +144,9 @@ export function CompanyForm({ company, setCompany }: CompanyFormProps){
         else if(!registerCompanyMutation.error){
           setSubmitError('');
           setIsSuccess(true);
-          router.replace('/');
+          setTimeout(() => {
+            router.refresh();
+          }, 500);
         }
       }
     } else {
