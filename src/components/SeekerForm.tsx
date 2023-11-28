@@ -2,7 +2,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import { api } from "~/utils/api";
 import { useEdgeStore } from '~/lib/edgestore';
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCamera, faClipboardCheck, faEllipsis, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -97,6 +97,7 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
 
   const { edgestore } = useEdgeStore();
   const registerSeekerMutation = api.user.registerSeeker.useMutation();
+  const router = useRouter()
   const [submitError, setSubmitError] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -160,7 +161,7 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
           setSubmitError('');
           setIsSuccess(true);
           setTimeout(() => {
-            redirect('/');
+            router.refresh();
           }, 500);
         }
       }
