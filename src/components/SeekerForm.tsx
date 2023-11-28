@@ -161,7 +161,7 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
           setSubmitError('');
           setIsSuccess(true);
           setTimeout(() => {
-            router.push('/');
+            router.replace('/');
           }, 2000);
         }
       }
