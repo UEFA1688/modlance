@@ -159,10 +159,10 @@ export function SeekerForm({ seeker, setSeeker }: SeekerFormProps){
         }
         else if(!registerSeekerMutation.error){
           setSubmitError('');
-          setIsSuccess(true);
           setTimeout(() => {
+            setIsSuccess(true);
             router.refresh();
-          }, 500);
+          }, 4000);
         }
       }
     } else {

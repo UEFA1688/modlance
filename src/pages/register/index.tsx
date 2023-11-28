@@ -23,24 +23,20 @@ export default function Register() {
   const [company, setCompany] = useState(false);
   const { data: sessionData, status } = useSession()
 
-  const { data: checkUserType } = api.user.checkUserType.useQuery();
+  const { data: checkUserType ,status:checkUserTypeStatus } = api.user.checkUserType.useQuery();
 
-  if (status === "loading") {
+  if (status === "loading" || checkUserTypeStatus === "loading") {
     return <IconLoading/>
   }
 
   else if (!sessionData) {
     return signIn();
   }
-
-  else if (!checkUserType?.needsRegistration) {
-    if (!checkUserType) {
-      return <IconLoading/>
-    }
+  if (!checkUserType?.needsRegistration) {
     router.replace('/')
   }
 
-  else if (checkUserType?.needsRegistration){
+  else{
     return (
       <div className="min-h-screen flex flex-col items-center justify-center max-w-[85rem] mx-auto px-6 sm:px-8 lg:px-12 py-8 sm:py-12">
         {seeker||company ?

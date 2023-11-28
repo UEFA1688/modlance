@@ -143,10 +143,10 @@ export function CompanyForm({ company, setCompany }: CompanyFormProps){
         }
         else if(!registerCompanyMutation.error){
           setSubmitError('');
-          setIsSuccess(true);
           setTimeout(() => {
+            setIsSuccess(true);
             router.refresh();
-          }, 500);
+          }, 4000);
         }
       }
     } else {
