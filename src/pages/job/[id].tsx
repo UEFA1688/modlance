@@ -218,7 +218,7 @@ export default function Job() {
                   </>
                   }   
                   {sessionData && checkUserType?.type === "SEEKER" &&
-                    <RegisterButton open={open} applied={appliedJob?.existingApplication ?? false} isSuccess={isSuccess}/>
+                    <RegisterButton   open={open} onClick={() => setOpen(!open)} applied={appliedJob?.existingApplication ?? false} isSuccess={isSuccess} setOpen={setOpen}/>
                   }
                 </div>
              
@@ -309,11 +309,13 @@ function Modal({ open, onClick, children, loading, isSuccess }: ModalProps){
 
 interface RegisterButtonProps {
   open: boolean;
+  onClick: () => void;
   applied: boolean;
   isSuccess: boolean;
+  setOpen:  React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function RegisterButton({ open, applied, isSuccess }: RegisterButtonProps){
+function RegisterButton({ open, onClick, applied, isSuccess, setOpen }: RegisterButtonProps){
 
 
   return (
@@ -332,6 +334,7 @@ function RegisterButton({ open, applied, isSuccess }: RegisterButtonProps){
       :
       <>
       <button
+        onClick={onClick}
         disabled={open}
         className={`transition-all w-56 sm:w-60 h-16 ${
           open
