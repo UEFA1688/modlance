@@ -145,7 +145,7 @@ export function CompanyForm({ company, setCompany }: CompanyFormProps){
           setSubmitError('');
           setIsSuccess(true);
           setTimeout(() => {
-            router.replace("/refresh");
+            router.refresh();
           }, 500);
         }
       }

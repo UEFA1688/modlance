@@ -12,7 +12,6 @@ import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faSquarePhone } from '@fortawesome/free-solid-svg-icons';
 import { useRouter as navigation } from 'next/navigation'
-import { useSession } from "next-auth/react";
 
 type Seeker = {
   dob: string;
@@ -23,12 +22,11 @@ export default function Seeker() {
   const navigationRouter = navigation();
   const { data: getSeekerById, status: getSeekerByIdStatus} = api.user.getSeekerById.useQuery({ seekerId: String(router.query.id) });
   const { data: seekerProtect, status: seekerProtectStatus } = api.user.seekerProtect.useQuery({ seekerId: String(router.query.id) });
-  const { data: sessionData } = useSession();
-
+  
   if (getSeekerByIdStatus === "loading" || seekerProtectStatus === "loading") {
     return <IconLoading/>
   }
-  else if (sessionData?.user.id === getSeekerById?.userId || seekerProtect?.hasApplied  ) {
+  else if (seekerProtect?.hasApplied) {
     return (
       <div className="flex flex-col justify-center items-center p-5 sm:p-10 gap-5">
       <Link href={`/`}>
